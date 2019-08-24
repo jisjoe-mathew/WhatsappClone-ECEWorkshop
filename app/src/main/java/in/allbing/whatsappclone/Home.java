@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Home extends AppCompatActivity {
 TextView tv;
@@ -21,7 +22,7 @@ FloatingActionButton fab;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(Home.this, "FAB Clicked", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -32,8 +33,11 @@ FloatingActionButton fab;
                 if(tab.getText().equals("CHATS")){
                     tv.setText("CHATS CLICKED");
                 }
-                else if(tab.getText().equals("STATUS..")){
+                else if(tab.getText().equals("STATUS")){
                     tv.setText("STATUS CLICKED");
+
+                }else if(tab.getText().equals("CALLS")){
+                    tv.setText("CALLS CLICKED");
 
                 }
             }
