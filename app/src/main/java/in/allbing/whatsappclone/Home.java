@@ -19,13 +19,14 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Home extends AppCompatActivity {
+    TextView tv;
+    TabLayout tab_layout;
+    FloatingActionButton fab;
+
     RecyclerView recyclerView;
     ChatAdapter chatAdapter;
     RecyclerView.LayoutManager layoutManager;
 
-TextView tv;
-TabLayout tab_layout;
-FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +36,7 @@ FloatingActionButton fab;
 
         getData();
 
-        layoutManager = new LinearLayoutManager(Home.this);
+        layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
         tv=findViewById(R.id.tv);
@@ -76,16 +77,20 @@ FloatingActionButton fab;
         });
 
     }
-    public  void getData(){
+
+    public void getData(){
+
         String BASE_URL = "https://api.myjson.com/bins/";
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+
+
         Api api = retrofit.create(Api.class);
 
-        Call<List<ChatModel>> call = api.getAllChats();
+        Call<List<ChatModel>> call =api.getAllChats();
 
         call.enqueue(new Callback<List<ChatModel>>() {
             @Override
@@ -102,7 +107,7 @@ FloatingActionButton fab;
 
     public void loadData(List<ChatModel> chatModelList){
 
-        chatAdapter = new ChatAdapter(Home.this,chatModelList);
+        chatAdapter = new ChatAdapter(this, chatModelList);
         recyclerView.setAdapter(chatAdapter);
     }
 }

@@ -14,12 +14,13 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 /**
- * Created by <Jithin/Jude> on 25,August,2019.
+ * Created by <Jithin/Jude> on 24,August,2019.
  * jithin.jude68@gmail.com
  */
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     Context context;
     List<ChatModel> chatModelList;
+
     public ChatAdapter(Context context, List<ChatModel> chatModelList) {
         this.context = context;
         this.chatModelList = chatModelList;
@@ -27,22 +28,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater
-                .from(viewGroup.getContext())
-                .inflate(R.layout.chat_item, viewGroup, false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+    public ChatAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.chat_item,viewGroup, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull ChatAdapter.ViewHolder viewHolder, int position) {
         viewHolder.textViewName.setText(chatModelList.get(position).name);
         viewHolder.textViewMessage.setText(chatModelList.get(position).message);
         viewHolder.textViewTime.setText(chatModelList.get(position).time);
-        Glide.with(context)
-                .load(chatModelList.get(position).imgUrl)
-                .into(viewHolder.imageViewProfile);
+
+        Glide.with(this.context).load(chatModelList.get(position).imgUrl).into(viewHolder.imageViewProfilePic);
     }
 
     @Override
@@ -54,14 +52,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         TextView textViewName;
         TextView textViewMessage;
         TextView textViewTime;
-        ImageView imageViewProfile;
-
+        ImageView imageViewProfilePic;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewName = itemView.findViewById(R.id.tv_name);
-            textViewMessage = itemView.findViewById(R.id.tv_msg);
+            textViewMessage = itemView.findViewById(R.id.tv_message);
             textViewTime = itemView.findViewById(R.id.tv_time);
-            imageViewProfile = itemView.findViewById(R.id.iv_profile);
+            imageViewProfilePic = itemView.findViewById(R.id.profile_image);
         }
     }
 }
