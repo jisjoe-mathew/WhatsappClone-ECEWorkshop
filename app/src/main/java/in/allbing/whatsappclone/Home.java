@@ -4,11 +4,25 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class Home extends AppCompatActivity {
+    RecyclerView recyclerView;
+    ChatAdapter chatAdapter;
+    RecyclerView.LayoutManager layoutManager;
+
 TextView tv;
 TabLayout tab_layout;
 FloatingActionButton fab;
@@ -16,6 +30,14 @@ FloatingActionButton fab;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        recyclerView = findViewById(R.id.rv_chat);
+
+        getData();
+
+        layoutManager = new LinearLayoutManager(Home.this);
+        recyclerView.setLayoutManager(layoutManager);
+
         tv=findViewById(R.id.tv);
         tab_layout=findViewById(R.id.tabLayout);
         fab=findViewById(R.id.fab);
@@ -53,5 +75,34 @@ FloatingActionButton fab;
             }
         });
 
+    }
+    public  void getData(){
+        String BASE_URL = "https://api.myjson.com/bins/";
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        Api api = retrofit.create(Api.class);
+
+        Call<List<ChatModel>> call = api.getAllChats();
+
+        call.enqueue(new Callback<List<ChatModel>>() {
+            @Override
+            public void onResponse(Call<List<ChatModel>> call, Response<List<ChatModel>> response) {
+                loadData(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<ChatModel>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void loadData(List<ChatModel> chatModelList){
+
+        chatAdapter = new ChatAdapter(Home.this,chatModelList);
+        recyclerView.setAdapter(chatAdapter);
     }
 }
